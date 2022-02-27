@@ -24,10 +24,10 @@ public class Algorithm implements AM
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(blurred, "png", baos);
         info.parent.out = baos;
-        info.parent.write(true);
+        info.parent.write(1);
         }catch(Exception e)
         {
-        info.parent.write(false);
+        info.parent.write(0);
         }
     }
     
