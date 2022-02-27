@@ -106,8 +106,10 @@ public class Main implements AM {
             System.out.println("Images blurred.");
         BufferedImage res;
         for(int i = 0; i < threads; i++){
+            System.out.println(i+" point get image progress");
             InputStream is = new ByteArrayInputStream((byte[])channels.get(i).readObject());
             BufferedImage img = ImageIO.read(is);
+            System.out.println(i+" point get image success");
             reses.add(img);
         }
         
