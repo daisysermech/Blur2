@@ -1,5 +1,5 @@
 
-package blur;
+//package blur;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import parcs.*;
