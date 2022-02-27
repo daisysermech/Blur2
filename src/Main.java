@@ -99,7 +99,7 @@ public class Main implements AM {
             ImageIO.write(imgs[i], "png", baos);
             byte[] bytes = baos.toByteArray();
             System.out.println(i+":  "+bytes);
-            channels.get(i).write(bytes);
+            channels.get(i).in=in;
             channels.get(i).write(radius);
         }
         
@@ -107,14 +107,7 @@ public class Main implements AM {
         BufferedImage res;
         for(int i = 0; i < threads; i++){
             System.out.println(i+" point get image progress");
-            byte bb[] = new byte[256];
-            System.out.println(bb);
-            channels.get(i).read(bb);
-            System.out.println(bb);
-            var temp =channels.get(i).readObject();
-            System.out.println(i+"  "+temp);
-            InputStream is = new ByteArrayInputStream((byte[])temp);
-            BufferedImage img = ImageIO.read(is);
+            BufferedImage img = ImageIO.read(channels.get(i).in);
             System.out.println(i+" point get image success");
             reses.add(img);
         }
