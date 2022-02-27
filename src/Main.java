@@ -107,7 +107,9 @@ public class Main implements AM {
         BufferedImage res;
         for(int i = 0; i < threads; i++){
             System.out.println(i+" point get image progress");
-            InputStream is = new ByteArrayInputStream((byte[])channels.get(i).readObject());
+            var temp =channels.get(i).readObject();
+            System.out.println(i+"  "+temp);
+            InputStream is = new ByteArrayInputStream((byte[])temp);
             BufferedImage img = ImageIO.read(is);
             System.out.println(i+" point get image success");
             reses.add(img);
