@@ -18,11 +18,11 @@ public class Algorithm implements AM
     public void run(AMInfo info)
     {
         try{
+            System.out.println("begin channel "+ info.curtask.number);
         byte[] bytes = (byte[])info.parent.readObject();
         InputStream is = new ByteArrayInputStream(bytes);
         BufferedImage img = ImageIO.read(is);
         int rad = info.parent.readInt();
-        
             System.out.println("small image readed successfully.");
         var blurred = blurredImage(img,rad);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
