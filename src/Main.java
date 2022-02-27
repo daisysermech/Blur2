@@ -99,7 +99,7 @@ public class Main implements AM {
             ImageIO.write(imgs[i], "png", baos);
             byte[] bytes = baos.toByteArray();
             System.out.println(i+":  "+bytes);
-            channels.get(i).in=in;
+            channels.get(i).in=new ByteArrayInputStream(bytes);
             channels.get(i).write(radius);
         }
         

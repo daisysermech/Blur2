@@ -23,7 +23,7 @@ public class Algorithm implements AM
         var blurred = blurredImage(img,rad);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(blurred, "png", baos);
-        info.parent.out = baos;
+        info.parent.in = new ByteArrayInputStream(baos.toByteArray());
         info.parent.write(true);
         }catch(Exception e)
         {
