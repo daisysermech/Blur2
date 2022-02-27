@@ -2,19 +2,19 @@
 all: run
 
 clean:
-	rm -f out/Bluck.jar out/MyClass.jar
+	rm -f out/Main.jar out/Algorithm.jar
 
-out/Bluck.jar: out/parcs.jar src/Bluck.java
-	@javac -cp out/parcs.jar src/Bluck.java
-	@jar cf out/Bluck.jar -C src Bluck.class
-	@rm -f src/Bluck.class
+out/Main.jar: out/parcs.jar src/Main.java
+	@javac -cp out/parcs.jar src/Main.java
+	@jar cf out/Main.jar -C src Main.class
+	@rm -f src/Main.class
 
-out/MyClass.jar: out/parcs.jar src/MyClass.java src/Node.java
-	@javac -cp out/parcs.jar src/MyClass.java
-	@jar cf out/MyClass.jar -C src MyClass.class
-	@rm -f src/MyClass.class
+out/Algorithm.jar: out/parcs.jar src/Algorithm.java
+	@javac -cp out/parcs.jar src/Algorithm.java
+	@jar cf out/Algorithm.jar -C src Algorithm.class
+	@rm -f src/Algorithm.class
 
-build: out/Bluck.jar out/MyClass.jar
+build: out/Main.jar out/Algorithm.jar
 
-run: out/Bluck.jar out/MyClass.jar
-	@cd out && java -cp 'parcs.jar:Bluck.jar' Bluck
+run: out/Main.jar out/Algorithm.jar
+	@cd out && java -cp 'parcs.jar:Main.jar' Main
