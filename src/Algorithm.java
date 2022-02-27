@@ -1,4 +1,5 @@
 
+package blur;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -22,12 +23,15 @@ public class Algorithm implements AM
         BufferedImage img = ImageIO.read(is);
         int rad = info.parent.readInt();
         
+            System.out.println("small image readed successfully.");
         var blurred = blurredImage(img,rad);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(blurred, "png", baos);
         byte[] bytes2 = baos.toByteArray();
         
         info.parent.write(bytes2);
+        
+            System.out.println("small images written successfully and sended.");
         }catch(Exception e)
         {
         info.parent.write(-1);

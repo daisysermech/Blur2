@@ -1,4 +1,5 @@
 
+package blur;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import parcs.*;
@@ -35,7 +36,7 @@ public class Main implements AM {
             System.out.print("Error while reading input\n");
             return;
         }
-        System.out.print("Read successful.");
+        System.out.println("Read file: successful.");
         long tStart = System.nanoTime();
         BufferedImage res = solve(info, link, radius,threads);
         long tEnd = System.nanoTime();
@@ -44,7 +45,7 @@ public class Main implements AM {
         ImageIO.write(res, "PNG", new File("combined.png"));
         }catch (Exception e)
         {
-            System.out.println("Error saving.");
+            System.out.println("Error saving combined image.");
         }
     }
     
@@ -64,6 +65,7 @@ public class Main implements AM {
             InputStream in = conn.getInputStream();
             input = ImageIO.read(in);
             input.coerceData(true);
+            System.out.println("Input image read successfully.");
 
         BufferedImage imgs[] = new BufferedImage[threads];
 
@@ -87,6 +89,8 @@ public class Main implements AM {
                 src_first_x, src_first_y, dst_corner_x+offset, dst_corner_y, null);
         current_img++;
         }
+        
+            System.out.println("Image cutted: success.");
         //paralle blur
         for (int i = 0; i < threads; i++){
             points.add(info.createPoint());
@@ -99,6 +103,7 @@ public class Main implements AM {
             channels.get(i).write(radius);
         }
         
+            System.out.println("Images blurred.");
         BufferedImage res;
         for(int i = 0; i < threads; i++){
             InputStream is = new ByteArrayInputStream((byte[])channels.get(i).readObject());
@@ -106,6 +111,7 @@ public class Main implements AM {
             reses.add(img);
         }
         
+            System.out.println("Blurred images sended success.");
             	//unite img
         int w = input.getWidth();
         int h = input.getHeight();
@@ -120,6 +126,7 @@ public class Main implements AM {
             g.drawImage(bi, w*i, 0, null);
         }
         
+            System.out.println("Images glued success.");
         g.dispose();
         return res;
         
