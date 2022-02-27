@@ -19,6 +19,8 @@ public class Algorithm implements AM
     {
         try{
         BufferedImage img = ImageIO.read(info.parent.in);
+        if (img != null ) {info.parent.write(2);
+        return;}
         int rad = info.parent.readInt();
         var blurred = blurredImage(img,rad);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
