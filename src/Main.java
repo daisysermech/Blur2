@@ -89,9 +89,9 @@ public class Main implements AM {
                 src_first_x, src_first_y, dst_corner_x+offset, dst_corner_y, null);
         current_img++;
         }
-        
-            System.out.println("Image cutted: success.");
-        //paralle blur
+        System.out.println("Image cutted: success.");
+        ImageIO.write(input, "jpg", new File("res.jpg"));
+        //parallel blur
         for (int i = 0; i < threads; i++){
             points.add(info.createPoint());
             channels.add(points.get(i).createChannel());
@@ -99,7 +99,7 @@ public class Main implements AM {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(imgs[i], "png", baos);
             byte[] bytes = baos.toByteArray();
-            channels.get(i).write(bytes);
+            System.out.println(i+":  "+bytes);
             channels.get(i).write(radius);
         }
         

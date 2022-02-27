@@ -19,6 +19,8 @@ public class Algorithm implements AM
     {
         try{
             System.out.println("begin channel "+ info.curtask.number);
+            if (info.parent.readObject()==null)
+            {info.parent.write("nothing");return;}
         byte[] bytes = (byte[])info.parent.readObject();
         InputStream is = new ByteArrayInputStream(bytes);
         BufferedImage img = ImageIO.read(is);
