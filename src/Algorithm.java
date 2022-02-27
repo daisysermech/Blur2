@@ -18,15 +18,14 @@ public class Algorithm implements AM
     public void run(AMInfo info)
     {
         try{
-        BufferedImage img = ImageIO.read(info.parent.in);
-        if (img != null ) {info.parent.write(2);
-        return;}
+        var bytes = (byte[])info.parent.readObject();
         int rad = info.parent.readInt();
+        InputStream is = new ByteArrayInputStream(bytes);
+        BufferedImage img = ImageIO.read(is);
         var blurred = blurredImage(img,rad);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(blurred, "png", baos);
-        info.parent.out = baos;
-        info.parent.write(1);
+        info.parent.write(baos.toByteArray());
         }catch(Exception e)
         {
         info.parent.write(0);

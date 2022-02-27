@@ -98,8 +98,7 @@ public class Main implements AM {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(imgs[i], "png", baos);
             byte[] bytes = baos.toByteArray();
-            channels.get(i).in=new ByteArrayInputStream(bytes);
-            System.out.println(i+":  "+channels.get(i).in);
+            channels.get(i).write(bytes);
             channels.get(i).write(radius);
         }
         
@@ -107,17 +106,15 @@ public class Main implements AM {
         BufferedImage res;
         for(int i = 0; i < threads; i++){
             System.out.println(i+" point get image progress");
-            if(channels.get(i).readInt() != 0)
-            {
-                var a = (ByteArrayOutputStream)channels.get(i).out;
+                var a = (byte[])channels.get(i).readObject();
                 System.out.println(i+":  "+a);
-                BufferedImage img = ImageIO.read(new ByteArrayInputStream(a.toByteArray()));
+                InputStream is = new ByteArrayInputStream(a);
+                BufferedImage img = ImageIO.read(is);
                 System.out.println(i+" point get image success");
                 reses.add(img);
-            }
         }
         
-            System.out.println("Blurred images sended success.");
+            System.out.println("Blurred images recieved success.");
             	//unite img
         int w = input.getWidth();
         int h = input.getHeight();
