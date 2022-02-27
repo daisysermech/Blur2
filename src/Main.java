@@ -90,7 +90,6 @@ public class Main implements AM {
         current_img++;
         }
         System.out.println("Image cutted: success.");
-        ImageIO.write(input, "jpg", new File("res.jpg"));
         //parallel blur
         for (int i = 0; i < threads; i++){
             points.add(info.createPoint());
@@ -100,6 +99,7 @@ public class Main implements AM {
             ImageIO.write(imgs[i], "png", baos);
             byte[] bytes = baos.toByteArray();
             System.out.println(i+":  "+bytes);
+            channels.get(i).write(bytes);
             channels.get(i).write(radius);
         }
         
@@ -107,6 +107,10 @@ public class Main implements AM {
         BufferedImage res;
         for(int i = 0; i < threads; i++){
             System.out.println(i+" point get image progress");
+            byte bb[] = new byte[256];
+            System.out.println(bb);
+            channels.get(i).read(bb);
+            System.out.println(bb);
             var temp =channels.get(i).readObject();
             System.out.println(i+"  "+temp);
             InputStream is = new ByteArrayInputStream((byte[])temp);
