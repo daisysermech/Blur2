@@ -117,9 +117,6 @@ public class Main implements AM {
 //                channels.get(i).write(data[j]);
             channels.get(i).write(radius);
             
-            System.out.println(i+" channel sent: "+Arrays.stream(data)
-        .mapToObj(String::valueOf)
-        .collect(Collectors.joining(" - ")));
         }
         
             System.out.println("Images blurred.");
