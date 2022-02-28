@@ -22,22 +22,10 @@ public class Algorithm implements AM
     public void run(AMInfo info)
     {
         try{
-            BufferedImage image = new BufferedImage(info.parent.readInt(),
-                    info.parent.readInt(),
-                    BufferedImage.TYPE_INT_ARGB);
-        int l = info.parent.readInt();
-            int[] arr = new int[l];
-            for (int j=0;j<l;j++)
-                arr[j]=info.parent.readInt();
-            var r =image.getRaster();
-            r.setPixels(0, 0,image.getWidth(), image.getHeight(),arr);
-            image.setData(r);
+            
         int rad = info.parent.readInt();
-        var blurred = blurredImage(image,rad);
-        int[] data = ((DataBufferInt) blurred.getRaster().getDataBuffer()).getData();
-            info.parent.write(data.length);
-            for(int j=0;j<data.length;j++)
-                info.parent.write(data[j]);
+       // var blurred = blurredImage(image,rad);
+        info.parent.write(rad);
         }catch(Exception e)
         {
         info.parent.write(0);

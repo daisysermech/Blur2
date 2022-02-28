@@ -110,11 +110,11 @@ public class Main implements AM {
             channels.add(points.get(i).createChannel());
             points.get(i).execute("Algorithm");
             int[] data = ((DataBufferInt) imgs[i].getRaster().getDataBuffer()).getData();
-            channels.get(i).write(imgs[i].getWidth());
-            channels.get(i).write(imgs[i].getHeight());
-            channels.get(i).write(data.length);
-            for(int j=0;j<data.length;j++)
-                channels.get(i).write(data[j]);
+//            channels.get(i).write(imgs[i].getWidth());
+//            channels.get(i).write(imgs[i].getHeight());
+//            channels.get(i).write(data.length);
+//            for(int j=0;j<data.length;j++)
+//                channels.get(i).write(data[j]);
             channels.get(i).write(radius);
             
             System.out.println(i+" channel sent: "+Arrays.stream(data)
@@ -127,14 +127,9 @@ public class Main implements AM {
         for(int i = 0; i < threads; i++){
             System.out.println(i+" point get image progress");
             int l = channels.get(i).readInt();
-            int[] arr = new int[l];
-            for (int j=0;j<l;j++)
-                arr[j]=channels.get(i).readInt();
+            System.out.println(l);
             BufferedImage image = new BufferedImage(imgs[i].getWidth(), imgs[i].getHeight(),
                     BufferedImage.TYPE_INT_ARGB);
-            var r =image.getRaster();
-            r.setPixels(0, 0,imgs[i].getWidth(), imgs[i].getHeight(),arr);
-            image.setData(r);
             System.out.println(i+" point get image success");
             reses.add(image);
         }
