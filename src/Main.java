@@ -13,6 +13,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Array;
+import java.util.stream.Collectors;
 
 public class Main implements AM {
     
@@ -114,6 +116,10 @@ public class Main implements AM {
             for(int j=0;j<data.length;j++)
                 channels.get(i).write(data[j]);
             channels.get(i).write(radius);
+            
+            System.out.println(i+" channel sent: "+Arrays.stream(data)
+        .mapToObj(String::valueOf)
+        .collect(Collectors.joining(" - ")));
         }
         
             System.out.println("Images blurred.");
