@@ -2,8 +2,11 @@
 //package blur;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import parcs.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+import java.awt.image.WritableRaster;
 import java.util.*;
 import java.io.*;
 import java.net.URL;
@@ -12,6 +15,8 @@ import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
 
 public class Main implements AM {
+    
+    public int threads = 4;
     public static void main(String[] args){	
         task mainTask = new task();
         mainTask.addJarFile("Algorithm.jar");
@@ -24,7 +29,6 @@ public class Main implements AM {
     public void run(AMInfo info){
         String link;
         int radius;
-        int threads = 4;
         try
         {
             BufferedReader in = new BufferedReader(new FileReader(info.curtask.findFile("input.txt")));
@@ -66,7 +70,15 @@ public class Main implements AM {
             input = ImageIO.read(in);
             input.coerceData(true);
             System.out.println("Input image read successfully.");
-
+            
+            int w = input.getWidth()/threads;
+            int h = input.getHeight()/threads;
+            w*=threads;
+            h*=threads;
+            BufferedImage outputImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+            outputImage.getGraphics().drawImage(input.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
+            input=outputImage;
+            
         BufferedImage imgs[] = new BufferedImage[threads];
 
         int subimage_Width = input.getWidth() / threads;
@@ -95,10 +107,12 @@ public class Main implements AM {
             points.add(info.createPoint());
             channels.add(points.get(i).createChannel());
             points.get(i).execute("Algorithm");
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(imgs[i], "png", baos);
-            byte[] bytes = baos.toByteArray();
-            channels.get(i).write(bytes);
+            int[] data = ((DataBufferInt) imgs[i].getRaster().getDataBuffer()).getData();
+            channels.get(i).write(imgs[i].getWidth());
+            channels.get(i).write(imgs[i].getHeight());
+            channels.get(i).write(data.length);
+            for(int j=0;j<data.length;j++)
+                channels.get(i).write(data[j]);
             channels.get(i).write(radius);
         }
         
@@ -106,21 +120,23 @@ public class Main implements AM {
         BufferedImage res;
         for(int i = 0; i < threads; i++){
             System.out.println(i+" point get image progress");
-                var obj = channels.get(i).readObject();
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                ObjectOutputStream os = new ObjectOutputStream(out);
-                os.writeObject(obj);
-                byte[] bytes = out.toByteArray();
-                InputStream is = new ByteArrayInputStream(bytes);
-                BufferedImage img = ImageIO.read(is);
-                System.out.println(i+" point get image success");
-                reses.add(img);
+            int l = channels.get(i).readInt();
+            int[] arr = new int[l];
+            for (int j=0;j<l;j++)
+                arr[j]=channels.get(i).readInt();
+            BufferedImage image = new BufferedImage(imgs[i].getWidth(), imgs[i].getHeight(),
+                    BufferedImage.TYPE_INT_ARGB);
+            var r =image.getRaster();
+            r.setPixels(0, 0,imgs[i].getWidth(), imgs[i].getHeight(),arr);
+            image.setData(r);
+            System.out.println(i+" point get image success");
+            reses.add(image);
         }
         
             System.out.println("Blurred images recieved success.");
             	//unite img
-        int w = input.getWidth();
-        int h = input.getHeight();
+        w = input.getWidth();
+        h = input.getHeight();
         res = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D  g = (Graphics2D)res.getGraphics();

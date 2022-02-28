@@ -5,11 +5,14 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ConvolveOp;
+import java.awt.image.DataBufferInt;
 import java.awt.image.Kernel;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.util.Base64;
 import javax.imageio.ImageIO;
 import parcs.*;
 
@@ -19,18 +22,22 @@ public class Algorithm implements AM
     public void run(AMInfo info)
     {
         try{
-        var obj = info.parent.readObject();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ObjectOutputStream os = new ObjectOutputStream(out);
-        os.writeObject(obj);
-        byte[] bytes = out.toByteArray();
+            BufferedImage image = new BufferedImage(info.parent.readInt(),
+                    info.parent.readInt(),
+                    BufferedImage.TYPE_INT_ARGB);
+        int l = info.parent.readInt();
+            int[] arr = new int[l];
+            for (int j=0;j<l;j++)
+                arr[j]=info.parent.readInt();
+            var r =image.getRaster();
+            r.setPixels(0, 0,image.getWidth(), image.getHeight(),arr);
+            image.setData(r);
         int rad = info.parent.readInt();
-        InputStream is = new ByteArrayInputStream(bytes);
-        BufferedImage img = ImageIO.read(is);
-        var blurred = blurredImage(img,rad);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(blurred, "png", baos);
-        info.parent.write(baos.toByteArray());
+        var blurred = blurredImage(image,rad);
+        int[] data = ((DataBufferInt) blurred.getRaster().getDataBuffer()).getData();
+            info.parent.write(data.length);
+            for(int j=0;j<data.length;j++)
+                info.parent.write(data[j]);
         }catch(Exception e)
         {
         info.parent.write(0);
@@ -110,5 +117,19 @@ public class Algorithm implements AM
 
         public static BufferedImage newArgbBufferedImage(int width, int height) {
         return new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    }
+        
+    public static String imgToBase64String(BufferedImage img, String formatName)
+    {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        try
+        {
+            ImageIO.write(img, formatName, os);
+            return Base64.getEncoder().encodeToString(os.toByteArray());
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
 }
