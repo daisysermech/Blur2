@@ -9,6 +9,7 @@ import java.awt.image.Kernel;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import javax.imageio.ImageIO;
 import parcs.*;
 
@@ -18,7 +19,11 @@ public class Algorithm implements AM
     public void run(AMInfo info)
     {
         try{
-        var bytes = (byte[])info.parent.readObject();
+        var obj = info.parent.readObject();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(out);
+        os.writeObject(obj);
+        byte[] bytes = out.toByteArray();
         int rad = info.parent.readInt();
         InputStream is = new ByteArrayInputStream(bytes);
         BufferedImage img = ImageIO.read(is);
