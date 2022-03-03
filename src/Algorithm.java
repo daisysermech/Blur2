@@ -9,6 +9,7 @@ import java.awt.image.DataBufferInt;
 import java.awt.image.Kernel;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
@@ -22,15 +23,21 @@ public class Algorithm implements AM
     public void run(AMInfo info)
     {
         try{
+            System.out.println("Started daemon proccess.");
         int rad = info.parent.readInt();
+            System.out.println("Readed radius - "+rad);
         BufferedImage image=ImageIO.read(info.parent.din);
+            System.out.println("image retrieved");
+            ImageIO.write(image, "PNG", new File("proc.png"));
         var blurred = blurredImage(image,rad);
+            ImageIO.write(blurred, "PNG", new File("blur.png"));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(blurred,"JPG",baos);
         info.parent.write(baos.toByteArray());
+            System.out.println("saved and thats all.");
         }catch(Exception e)
         {
-        info.parent.write(0);
+            System.out.println("ERROR");
         }
     }
     
