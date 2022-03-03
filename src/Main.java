@@ -109,24 +109,15 @@ public class Main implements AM {
             points.add(info.createPoint());
             channels.add(points.get(i).createChannel());
             points.get(i).execute("Algorithm");
-            int[] data = ((DataBufferInt) imgs[i].getRaster().getDataBuffer()).getData();
-//            channels.get(i).write(imgs[i].getWidth());
-//            channels.get(i).write(imgs[i].getHeight());
-//            channels.get(i).write(data.length);
-//            for(int j=0;j<data.length;j++)
-//                channels.get(i).write(data[j]);
+            ImageIO.write(imgs[i], "JPG", info.parent.dout);
             channels.get(i).write(radius);
-            
         }
         
             System.out.println("Images blurred.");
         BufferedImage res;
         for(int i = 0; i < threads; i++){
             System.out.println(i+" point get image progress");
-            int l = channels.get(i).readInt();
-            System.out.println(l);
-            BufferedImage image = new BufferedImage(imgs[i].getWidth(), imgs[i].getHeight(),
-                    BufferedImage.TYPE_INT_ARGB);
+            BufferedImage image=ImageIO.read(channels.get(i).din);
             System.out.println(i+" point get image success");
             reses.add(image);
         }

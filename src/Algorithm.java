@@ -22,10 +22,12 @@ public class Algorithm implements AM
     public void run(AMInfo info)
     {
         try{
-            
         int rad = info.parent.readInt();
-       // var blurred = blurredImage(image,rad);
-        info.parent.write(rad);
+        BufferedImage image=ImageIO.read(info.parent.din);
+        var blurred = blurredImage(image,rad);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(blurred,"JPG",baos);
+        info.parent.write(baos.toByteArray());
         }catch(Exception e)
         {
         info.parent.write(0);
