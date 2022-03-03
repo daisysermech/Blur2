@@ -109,7 +109,7 @@ public class Main implements AM {
             points.add(info.createPoint());
             channels.add(points.get(i).createChannel());
             points.get(i).execute("Algorithm");
-            ImageIO.write(imgs[i], "JPG", info.parent.dout);
+            ImageIO.write(imgs[i], "JPG", channels.get(i).dout);
             channels.get(i).write(radius);
         }
         
@@ -144,7 +144,7 @@ public class Main implements AM {
         }
         catch(Exception e)
         {
-            System.out.println("Cannot read image.");
+            e.printStackTrace(System.out);
             return null;
         }
         
