@@ -32,6 +32,7 @@ public class Algorithm implements AM
         }catch(Exception e)
         {
             System.out.println("ERROR");
+            e.printStackTrace();
         }
     }
     
