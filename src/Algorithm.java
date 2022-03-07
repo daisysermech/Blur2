@@ -20,7 +20,9 @@ public class Algorithm implements AM
         try{
             
             System.out.println("Started daemon proccess.");
-            Image_SRZ img = (Image_SRZ)info.parent.readObject();
+            Object o = info.parent.readObject();
+            System.out.println(o);
+            Image_SRZ img = (Image_SRZ)o;
             ImageIO.write(img.getImage(), "png", new File("proc.png"));
             int rad = info.parent.readInt();
             System.out.println("Readed radius - "+rad);

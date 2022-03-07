@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
 class Image_SRZ implements Serializable {
+    private static final long serialVersionUID = 5844813814579262025L;
     private int width, height;
     private int[] pixels;
     public Image_SRZ(BufferedImage image)
