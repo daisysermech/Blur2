@@ -2,9 +2,9 @@
 //package blur;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import parcs.*;
 import java.awt.image.BufferedImage;
+import java.awt.Image;
 import java.awt.image.DataBufferInt;
 import java.awt.image.WritableRaster;
 import java.util.*;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class Main implements AM {
     
-    public int threads = 4;
+    public static int threads = 4;
     public static void main(String[] args){	
         task mainTask = new task();
         mainTask.addJarFile("Algorithm.jar");
@@ -44,7 +44,7 @@ public class Main implements AM {
         }
         System.out.println("Read file: successful.");
         long tStart = System.nanoTime();
-        BufferedImage res = solve(info, link, radius,threads);
+        BufferedImage res = solve(info, link, radius);
         long tEnd = System.nanoTime();
         System.out.println("time = " + ((tEnd - tStart) / 1000000) + "ms");
         try{
@@ -55,7 +55,7 @@ public class Main implements AM {
         }
     }
     
-    public static BufferedImage solve(AMInfo info, String imageUrl, int radius, int threads)
+    public static BufferedImage solve(AMInfo info, String imageUrl, int radius)
     {
         List<BufferedImage> reses = new ArrayList<>();
         List<point> points = new ArrayList<>();
@@ -109,15 +109,20 @@ public class Main implements AM {
             points.add(info.createPoint());
             channels.add(points.get(i).createChannel());
             points.get(i).execute("Algorithm");
-            ImageIO.write(imgs[i], "JPG", channels.get(i).dout);
+            Image_SRZ curr_img = new Image_SRZ();
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(imgs[i], "png", os);
+            InputStream is = new ByteArrayInputStream(os.toByteArray());
+            curr_img.readObject(new ObjectInputStream(is));
+            channels.get(i).write(curr_img);
             channels.get(i).write(radius);
         }
         
-            System.out.println("Images blurred.");
+        System.out.println("Images blurred.");
         BufferedImage res;
         for(int i = 0; i < threads; i++){
             System.out.println(i+" point get image progress");
-            BufferedImage image=ImageIO.read(channels.get(i).din);
+            var image = ((Image_SRZ)channels.get(i).readObject()).image;
             System.out.println(i+" point get image success");
             reses.add(image);
         }
@@ -137,7 +142,7 @@ public class Main implements AM {
             g.drawImage(bi, w*i, 0, null);
         }
         
-            System.out.println("Images glued success.");
+        System.out.println("Images glued success.");
         g.dispose();
         return res;
         

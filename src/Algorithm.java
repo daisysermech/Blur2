@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Base64;
 import javax.imageio.ImageIO;
@@ -23,17 +24,20 @@ public class Algorithm implements AM
     public void run(AMInfo info)
     {
         try{
+            
             System.out.println("Started daemon proccess.");
-        int rad = info.parent.readInt();
+            Image_SRZ img = (Image_SRZ)info.parent.readObject();
+            int rad = info.parent.readInt();
             System.out.println("Readed radius - "+rad);
-        BufferedImage image=ImageIO.read(info.parent.din);
             System.out.println("image retrieved");
-            ImageIO.write(image, "PNG", new File("proc.png"));
-        var blurred = blurredImage(image,rad);
-            ImageIO.write(blurred, "PNG", new File("blur.png"));
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(blurred,"JPG",baos);
-        info.parent.write(baos.toByteArray());
+            var blurred = blurredImage(img.image,rad);
+            
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(blurred, "png", os);
+            InputStream is = new ByteArrayInputStream(os.toByteArray());
+            img.readObject(new ObjectInputStream(is));
+            
+            info.parent.write(img);
             System.out.println("saved and thats all.");
         }catch(Exception e)
         {
