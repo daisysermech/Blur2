@@ -110,10 +110,7 @@ public class Main implements AM {
             channels.add(points.get(i).createChannel());
             points.get(i).execute("Algorithm");
             Image_SRZ curr_img = new Image_SRZ();
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(imgs[i], "png", os);
-            InputStream is = new ByteArrayInputStream(os.toByteArray());
-            curr_img.readObject(new ObjectInputStream(is));
+            curr_img.setImg(imgs[i]);
             channels.get(i).write(curr_img);
             channels.get(i).write(radius);
         }
@@ -122,7 +119,7 @@ public class Main implements AM {
         BufferedImage res;
         for(int i = 0; i < threads; i++){
             System.out.println(i+" point get image progress");
-            var image = ((Image_SRZ)channels.get(i).readObject()).image;
+            var image = ((Image_SRZ)channels.get(i).readObject()).getImg();
             System.out.println(i+" point get image success");
             reses.add(image);
         }

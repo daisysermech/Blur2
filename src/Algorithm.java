@@ -30,13 +30,8 @@ public class Algorithm implements AM
             int rad = info.parent.readInt();
             System.out.println("Readed radius - "+rad);
             System.out.println("image retrieved");
-            var blurred = blurredImage(img.image,rad);
-            
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(blurred, "png", os);
-            InputStream is = new ByteArrayInputStream(os.toByteArray());
-            img.readObject(new ObjectInputStream(is));
-            
+            var blurred = blurredImage(img.getImg(),rad);
+            img.setImg(blurred);
             info.parent.write(img);
             System.out.println("saved and thats all.");
         }catch(Exception e)
