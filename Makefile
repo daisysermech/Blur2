@@ -4,15 +4,15 @@ all: run
 clean:
 	rm -f out/Main.jar out/Algorithm.jar
 
-out/Main.jar: out/parcs.jar src/Main.java
-	@javac -cp out/parcs.jar src/Main.java
-	@jar cf out/Main.jar -C src Main.class
-	@rm -f src/Main.class
+out/Main.jar: out/parcs.jar src/Main.java src/Image_SRZ.java
+	@javac -cp out/parcs.jar src/Main.java src/Image_SRZ.java
+	@jar cf out/Main.jar -C src Main.class src Image_SRZ.class
+	@rm -f src/Main.class src/Image_SRZ.class
 
-out/Algorithm.jar: out/parcs.jar src/Algorithm.java
-	@javac -cp out/parcs.jar src/Algorithm.java
-	@jar cf out/Algorithm.jar -C src Algorithm.class
-	@rm -f src/Algorithm.class
+out/Algorithm.jar: out/parcs.jar src/Algorithm.java src/Image_SRZ.java
+	@javac -cp out/parcs.jar src/Algorithm.java src/Image_SRZ.java
+	@jar cf out/Algorithm.jar -C src Algorithm.class src Image_SRZ.class
+	@rm -f src/Algorithm.class src/Image_SRZ.class
 
 build: out/Main.jar out/Algorithm.jar
 
