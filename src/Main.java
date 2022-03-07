@@ -5,16 +5,11 @@ import java.awt.Graphics2D;
 import parcs.*;
 import java.awt.image.BufferedImage;
 import java.awt.Image;
-import java.awt.image.DataBufferInt;
-import java.awt.image.WritableRaster;
 import java.util.*;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import javax.imageio.ImageIO;
-import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Array;
-import java.util.stream.Collectors;
 
 public class Main implements AM {
     
@@ -109,9 +104,8 @@ public class Main implements AM {
             points.add(info.createPoint());
             channels.add(points.get(i).createChannel());
             points.get(i).execute("Algorithm");
-            Image_SRZ curr_img = new Image_SRZ();
-            curr_img.setImg(imgs[i]);
-            channels.get(i).write(curr_img);
+            Image_SRZ im = new Image_SRZ(imgs[i]);
+            channels.get(i).write(im);
             channels.get(i).write(radius);
         }
         
@@ -119,7 +113,7 @@ public class Main implements AM {
         BufferedImage res;
         for(int i = 0; i < threads; i++){
             System.out.println(i+" point get image progress");
-            var image = ((Image_SRZ)channels.get(i).readObject()).getImg();
+            var image = ((Image_SRZ)channels.get(i).readObject()).getImage();
             System.out.println(i+" point get image success");
             reses.add(image);
         }

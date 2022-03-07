@@ -2,24 +2,24 @@
 //package blur;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
-import javax.imageio.ImageIO;
 
-class Image_SRZ implements Serializable
-{
-    private BufferedImage image;
-
-    public BufferedImage getImg()
+class Image_SRZ implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private int width, height;
+    private int[] pixels;
+    public Image_SRZ(BufferedImage image)
     {
-        return image;
+        width = image.getWidth();
+        height = image.getHeight();
+        pixels = new int[width * height];
+        image.getRGB(0, 0, width, height, pixels, 0, width);
     }
-    public void setImg(BufferedImage bufferedImage)
+    
+    public BufferedImage getImage()
     {
-        image = bufferedImage;
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        image.setRGB(0, 0, width, height, pixels, 0, width);
+        return image;
     }
 }

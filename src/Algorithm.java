@@ -5,15 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ConvolveOp;
-import java.awt.image.DataBufferInt;
 import java.awt.image.Kernel;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Base64;
 import javax.imageio.ImageIO;
 import parcs.*;
@@ -30,8 +23,8 @@ public class Algorithm implements AM
             int rad = info.parent.readInt();
             System.out.println("Readed radius - "+rad);
             System.out.println("image retrieved");
-            var blurred = blurredImage(img.getImg(),rad);
-            img.setImg(blurred);
+            var blurred = blurredImage(img.getImage(),rad);
+            img = new Image_SRZ(blurred);
             info.parent.write(img);
             System.out.println("saved and thats all.");
         }catch(Exception e)
