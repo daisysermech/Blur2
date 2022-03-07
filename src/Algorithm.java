@@ -7,6 +7,7 @@ import java.awt.image.BufferedImageOp;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Base64;
 import javax.imageio.ImageIO;
 import parcs.*;
@@ -20,6 +21,7 @@ public class Algorithm implements AM
             
             System.out.println("Started daemon proccess.");
             Image_SRZ img = (Image_SRZ)info.parent.readObject();
+            ImageIO.write(img.getImage(), "png", new File("proc.png"));
             int rad = info.parent.readInt();
             System.out.println("Readed radius - "+rad);
             System.out.println("image retrieved");

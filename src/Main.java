@@ -31,6 +31,9 @@ public class Main implements AM {
             BufferedReader in = new BufferedReader(new FileReader(info.curtask.findFile("input.txt")));
             link = in.readLine();
             radius = Integer.parseInt(in.readLine());
+            
+            System.out.println("link = "+link);
+            System.out.println("rad = "+radius);
         }
         catch (IOException e)
         {
